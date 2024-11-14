@@ -21,8 +21,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
   template: `
     <section>
       <ul>
-        @for (capmpus of allCampuses; track campus.id) {
-          <li>{{ campus }}</li>
+        @for (campus of allCampuses(); track campus.id) {
+          <li>{{ campus.name }}</li>
         }
       </ul>
     </section>
@@ -55,7 +55,8 @@ export class HomeComponent implements OnInit {
   @Input() apiToken!: string;
   usersSignal: Signal<User[] | undefined> = signal(undefined);
   private _injector = inject(Injector);
-  allCampuses!: Promise<Campus[] | []>;
+  allCampuses = signal<Campus[]>([]);
+  campusPage: number = 1;
 
   constructor(public apiDataService: ApidataService) {}
   ngOnInit() {
@@ -64,21 +65,27 @@ export class HomeComponent implements OnInit {
       injector: this._injector,
       initialValue: [],
     });
-    this.allCampuses = this.getCampuses();
+    this.getCampuses();
   }
 
   private apiUrl = 'https://api.intra.42.fr';
 
-  async getCampuses(): Promise<Campus[] | []> {
-    const campuses = await fetch(
-      this.apiUrl + '/v2/campus?arg1={page: {number: 2}}',
-      {
+  async getCampuses() {
+    try {
+      const response = await fetch(this.apiUrl + `/v2/campus?page=`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${this.apiToken}`,
         },
-      },
-    );
-    return (await campuses.json()) ?? [];
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error fetching campuses: ${response.statusText}`);
+      }
+      this.allCampuses.set(await response.json());
+      console.log(this.allCampuses());
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
