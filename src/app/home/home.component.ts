@@ -56,12 +56,12 @@ export class HomeComponent implements OnInit {
   @Input() apiToken!: string;
   usersSignal: Signal<User[] | undefined> = signal(undefined);
   private _injector = inject(Injector);
-  campusPage: number = 1;
 
   constructor(
     public apiDataService: ApidataService,
     public fetchCampuses: FetchCampusesService,
   ) {}
+
   ngOnInit() {
     console.log('this is token: ' + this.apiToken);
     this.usersSignal = toSignal(this.apiDataService.getData(this.apiToken), {

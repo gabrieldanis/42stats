@@ -5,6 +5,7 @@ import { Campus } from './campus';
   providedIn: 'root',
 })
 export class FetchCampusesService {
+  campusPage: number = 2;
   constructor() {}
 
   allCampuses = signal<Campus[]>([]);
@@ -12,18 +13,21 @@ export class FetchCampusesService {
 
   async getCampuses(token: string) {
     try {
-      const response = await fetch(this.apiUrl + `/v2/campus?page=`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await fetch(
+        this.apiUrl + `/v2/campus?page=` + this.campusPage,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         throw new Error(`Error fetching campuses: ${response.statusText}`);
       }
       this.allCampuses.set(await response.json());
-      console.log(this.allCampuses());
+      // console.log(this.allCampuses());
     } catch (error) {
       console.error(error);
     }
