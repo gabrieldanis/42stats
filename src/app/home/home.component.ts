@@ -22,7 +22,7 @@ import { FetchCampusesService } from '../fetch-campuses.service';
   template: `
     <section>
       <ul>
-        @for (campus of this.fetchCampuses.allCampuses(); track campus.id) {
+        @for (campus of this.fetchCampuses.allCampuses; track campus.id) {
           <li>{{ campus.name }}</li>
         }
       </ul>

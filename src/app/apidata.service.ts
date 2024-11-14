@@ -70,25 +70,25 @@ export class ApidataService {
   //   });
   // }
 
-  getCampuses(token: string): Observable<unknown> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return this.http.get(this.apiUrl + '/v2/campus?arg1={page: {number: 2}}', {
-      headers,
-    });
-  }
+  //   getCampuses(token: string): Observable<unknown> {
+  //     const headers = new HttpHeaders({
+  //       Authorization: `Bearer ${token}`,
+  //     });
+  //     return this.http.get(this.apiUrl + '/v2/campus?arg1={page: {number: 2}}', {
+  //       headers,
+  //     });
+  //   }
 
-  logCampuses(): void {
-    this.getCampuses(
-      '0425cd1390be6803ce8e103cd1a953ea589f59c9fec026bca286496309215931',
-    ).subscribe({
-      next: (data) => {
-        console.log(JSON.stringify(data));
-      },
-      error: (error) => {
-        console.error('Error fetching token:', error);
-      },
-    });
-  }
+  //   logCampuses(): void {
+  //     this.getCampuses(
+  //       '0425cd1390be6803ce8e103cd1a953ea589f59c9fec026bca286496309215931',
+  //     ).subscribe({
+  //       next: (data) => {
+  //         console.log(JSON.stringify(data));
+  //       },
+  //       error: (error) => {
+  //         console.error('Error fetching token:', error);
+  //       },
+  //     });
+  //   }
 }

@@ -5,31 +5,41 @@ import { Campus } from './campus';
   providedIn: 'root',
 })
 export class FetchCampusesService {
-  campusPage: number = 2;
+  campusPage: number = 1;
   constructor() {}
 
-  allCampuses = signal<Campus[]>([]);
+  allCampuses: Campus[] = [];
+  currentCampuses: Campus[] = [];
   private apiUrl = 'https://api.intra.42.fr';
 
   async getCampuses(token: string) {
-    try {
-      const response = await fetch(
-        this.apiUrl + `/v2/campus?page=` + this.campusPage,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
+    while (true) {
+      try {
+        const response = await fetch(
+          this.apiUrl + `/v2/campus?page=${this.campusPage}`,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
-        },
-      );
+        );
 
-      if (!response.ok) {
-        throw new Error(`Error fetching campuses: ${response.statusText}`);
+        if (!response.ok) {
+          throw new Error(`Error fetching campuses: ${response.statusText}`);
+        }
+        this.currentCampuses = await response.json();
+        console.log(this.currentCampuses);
+        this.allCampuses = this.allCampuses.concat(this.currentCampuses);
+        await new Promise((r) => setTimeout(r, 1000));
+        this.campusPage += 1;
+        if (!this.currentCampuses.length) {
+          return;
+        }
+      } catch (error) {
+        console.error(error);
+        break;
       }
-      this.allCampuses.set(await response.json());
-      // console.log(this.allCampuses());
-    } catch (error) {
-      console.error(error);
     }
   }
 }
