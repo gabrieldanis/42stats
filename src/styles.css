@@ -1,1 +1,73 @@
 /* You can add global styles to this file, and also import other style files */
+
+* {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+}
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+h2 {
+  text-transform: uppercase;
+  padding-top: 0.5em;
+  padding-bottom: 0.3em;
+}
+
+h4 {
+  padding-bottom: 16px;
+}
+
+p,
+a,
+h2,
+h4 {
+  margin-left: 15px;
+}
+
+p {
+  padding-bottom: 28px;
+}
+
+img {
+  border-radius: 5px 5px 0 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.card {
+  /* Add shadows to create the "card" effect */
+  align-items: stretch;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  border-radius: 5px; /* 5px rounded corners */
+  width: 300px;
+  padding-bottom: 20px;
+}
+
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Add some padding inside the card container */
+.container {
+  padding: 2px 16px;
+}
+
+.plus {
+  opacity: 0.3;
+  width: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.cardbody {
+  transition: all 0.4s ease-in-out;
+  max-height: 0;
+  overflow: hidden;
+}
