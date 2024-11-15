@@ -32,7 +32,6 @@ export class AppComponent {
   tokenSignal: Signal<Tokendata | undefined>;
 
   constructor(public apiDataService: ApidataService) {
-    console.log('hi');
     this.tokenSignal = toSignal(apiDataService.getTokenObservable());
   }
 }

@@ -22,7 +22,7 @@ import { FetchCampusesService } from '../fetch-campuses.service';
   template: `
     <section>
       <ul>
-        @for (campus of this.fetchCampuses.allCampuses; track campus.id) {
+        @for (campus of this.allCampuses; track campus.id) {
           <li>{{ campus.name }}</li>
         }
       </ul>
@@ -56,6 +56,7 @@ export class HomeComponent implements OnInit {
   @Input() apiToken!: string;
   usersSignal: Signal<User[] | undefined> = signal(undefined);
   private _injector = inject(Injector);
+  allCampuses: Campus[] = [];
 
   constructor(
     public apiDataService: ApidataService,
@@ -68,6 +69,14 @@ export class HomeComponent implements OnInit {
       injector: this._injector,
       initialValue: [],
     });
-    this.fetchCampuses.getCampuses(this.apiToken);
+
+    this.fetchCampuses.fetchAllCampuses(this.apiToken).subscribe({
+      next: (result: Campus[]) => {
+        this.allCampuses = this.allCampuses.concat(result);
+      },
+      error: (error: any) => {
+        console.error('Failed to fetch data', error);
+      },
+    });
   }
 }
