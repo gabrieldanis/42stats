@@ -10,13 +10,12 @@ import { CommonModule } from '@angular/common';
   template: `
     <article class="card">
       <section>
-        <ng-content> </ng-content>
+        <ng-content></ng-content>
         <a href="#" (click)="toggleBio()"
           ><img src="/plus.png" class="plus" />more info</a
         >
         <div class="cardbody" [style.max-height]="showBio ? '60px' : '0'">
           <ng-content select="app-card-body"></ng-content>
-          <!-- <ng-content select="app-card-body" *ngIf="showBio"></ng-content> -->
         </div>
       </section>
     </article>

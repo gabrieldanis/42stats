@@ -42,9 +42,9 @@ import { FetchCampusesService } from '../fetch-campuses.service';
 
             <!-- sending to bio within card -->
             <app-card-body
-              ><p>{{ user.user.location }}</p></app-card-body
+              ><p>{{ user.user.email }}</p>
+              <p>{{ user.user.id }}</p></app-card-body
             >
-            <p>{{ user.user.id }}</p>
           </app-card>
         }
       }
