@@ -1,7 +1,7 @@
-@if (tokenSignal(); as token) {
-  {{ token.access_token }}
+@if (apiToken(); as token) {
+  {{ token }}
 
-  <app-home [apiToken]="token.access_token"></app-home>
+  <app-home [apiToken]="token"></app-home>
 } @else {
   Loading Token....
 }

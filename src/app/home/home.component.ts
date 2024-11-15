@@ -65,7 +65,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     console.log('this is token: ' + this.apiToken);
-    this.usersSignal = toSignal(this.apiDataService.getData(this.apiToken), {
+    this.usersSignal = toSignal(this.apiDataService.fetchUsers(this.apiToken), {
       injector: this._injector,
       initialValue: [],
     });
