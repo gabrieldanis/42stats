@@ -1,18 +1,5 @@
-import {
-  Component,
-  Signal,
-  signal,
-  inject,
-  effect,
-  computed,
-} from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { CardComponent } from './card/card.component';
-import { HomeComponent } from './home/home.component';
+import { Component, Signal, inject } from '@angular/core';
 import { Tokendata } from './tokendata';
-import { User } from './user';
-import { Campus } from './campus';
-import { CardBodyComponent } from './card-body/card-body.component';
 import { CommonModule } from '@angular/common';
 import { ApidataService } from './apidata.service';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -21,14 +8,7 @@ import { CampusesComponent } from './campuses/campuses.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
-    RouterOutlet,
-    HomeComponent,
-    CardComponent,
-    CardBodyComponent,
-    CommonModule,
-    CampusesComponent,
-  ],
+  imports: [CommonModule, CampusesComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
