@@ -10,8 +10,6 @@ import { CardBodyComponent } from '../card-body/card-body.component';
   standalone: true,
   imports: [CardComponent, CardBodyComponent],
   template: `
-    <p>{{ id() }}</p>
-    <p>token: {{ token() }}</p>
     <section class="wrapper">
       @if (users(); as users) {
         @for (user of users; track user.id) {
@@ -19,7 +17,9 @@ import { CardBodyComponent } from '../card-body/card-body.component';
             <img
               [src]="user.user.image.versions.small"
               [alt]="user.user.displayname"
-              class="image"
+              width="300px"
+              height="250px"
+              class="profile-image"
             />
             <h2>{{ user.user.displayname }}</h2>
             <h4>{{ user.level }}</h4>
