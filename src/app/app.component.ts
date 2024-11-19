@@ -1,4 +1,11 @@
-import { Component, Signal, signal, inject, effect } from '@angular/core';
+import {
+  Component,
+  Signal,
+  signal,
+  inject,
+  effect,
+  computed,
+} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CardComponent } from './card/card.component';
 import { HomeComponent } from './home/home.component';
@@ -9,6 +16,7 @@ import { CardBodyComponent } from './card-body/card-body.component';
 import { CommonModule } from '@angular/common';
 import { ApidataService } from './apidata.service';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { CampusesComponent } from './campuses/campuses.component';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +27,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
     CardComponent,
     CardBodyComponent,
     CommonModule,
+    CampusesComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
@@ -27,28 +36,18 @@ export class AppComponent {
   title = 'card';
 
   private apiDataService = inject(ApidataService);
-
-  // Signals
-  isLoading = signal(true);
-  apiToken = signal<string | null>(null);
-  users = signal<User[]>([]);
+  tokenSignal: Signal<Tokendata | undefined>;
 
   constructor() {
-    const apiTokenSignal = toSignal(this.apiDataService.fetchToken(), {
-      initialValue: null,
-    });
-
-    effect(
-      () => {
-        const token = apiTokenSignal();
-        if (token) {
-          this.apiToken.set(token.access_token);
-          // this.loadUsers(token.access_token);
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    this.tokenSignal = toSignal(this.apiDataService.fetchToken());
   }
+  // users = computed(() => {
+  //   const token = this.tokenSignal();
+  //   if (token) {
+  //     return this.apiDataService.fetchUsers(token.access_token);
+  //   }
+  //   return undefined;
+  // });
 
   // private loadUsers(apiToken: string) {
   //   const usersSignal = toSignal(this.apiDataService.fetchUsers(apiToken), {

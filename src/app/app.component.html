@@ -1,7 +1,6 @@
-@if (apiToken(); as token) {
-  {{ token }}
-
-  <app-home [apiToken]="token"></app-home>
+@if (tokenSignal(); as token) {
+  <app-campuses [token]="token.access_token"></app-campuses>
+  <!-- <app-home [users]="users"></app-home> -->
 } @else {
   Loading Token....
 }

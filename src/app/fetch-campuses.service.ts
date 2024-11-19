@@ -1,6 +1,14 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map, expand, delay, switchMap } from 'rxjs/operators';
+import {
+  map,
+  expand,
+  delay,
+  switchMap,
+  concatMap,
+  mergeMap,
+  scan,
+} from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { Campus } from './campus';
 
@@ -12,7 +20,15 @@ export class FetchCampusesService {
   constructor(private http: HttpClient) {}
   private apiUrl = 'https://api.intra.42.fr/v2/campus?page=';
 
-  fetchCampusesPage(page: number, token: string): Observable<Campus[]> {
+  // fetchCampusesPage(page: number, token: string): Observable<Campus[]> {
+  //   const url = `${this.apiUrl}${page}`;
+  //   const headers = new HttpHeaders({
+  //     Authorization: `Bearer ${token}`,
+  //   });
+  //   return this.http.get<Campus[]>(url, { headers });
+  // }
+
+  fetchCampusPage(page: number, token: string): Observable<Campus[]> {
     const url = `${this.apiUrl}${page}`;
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -21,19 +37,20 @@ export class FetchCampusesService {
   }
 
   fetchAllCampuses(token: string): Observable<Campus[]> {
-    return this.fetchCampusesPage(this.campusPage, token).pipe(
+    return this.fetchCampusPage(this.campusPage, token).pipe(
       expand((data: Campus[]) => {
         if (data.length > 0) {
           this.campusPage++;
           return of(null).pipe(
-            delay(500), // Add a delay of 1 second before making the next request
-            switchMap(() => this.fetchCampusesPage(this.campusPage, token)),
+            delay(150), // Add a delay of 1 second before making the next request
+            mergeMap(() => this.fetchCampusPage(this.campusPage, token)),
           );
         } else {
           return of([]);
         }
       }),
-      map((data: any) => data.flat()),
+      scan((acc: Campus[], data: Campus[]) => acc.concat(data), []),
+      map((data) => data.filter((item) => item !== null)),
     );
   }
 }
