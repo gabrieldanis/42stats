@@ -34,13 +34,11 @@ export class ApidataService {
     );
   }
 
-  fetchUsers(token: string): Observable<User[]> {
+  fetchUsers(token: string, id: number): Observable<User[]> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
-    return this.http.get<User[]>(
-      this.apiUrl + '/v2/cursus_users/?filter[campus_id]=53&page[number]=28',
-      { headers },
-    );
+    const url = `${this.apiUrl}/v2/cursus_users/?filter[campus_id]=${id}&page[number]=1`;
+    return this.http.get<User[]>(url, { headers });
   }
 }

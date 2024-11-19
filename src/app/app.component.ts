@@ -4,17 +4,18 @@ import { CommonModule } from '@angular/common';
 import { ApidataService } from './apidata.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CampusesComponent } from './campuses/campuses.component';
+import { HomeComponent } from './home/home.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, CampusesComponent],
+  imports: [CommonModule, CampusesComponent, HomeComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent {
   title = 'card';
-
   private apiDataService = inject(ApidataService);
   tokenSignal: Signal<Tokendata | undefined>;
 
