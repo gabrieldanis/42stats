@@ -36,7 +36,7 @@ export class CampusesComponent implements OnInit {
   readonly token = input.required<string>();
 
   constructor() {
-    effect(() => console.log(`this is token in campuses: ${this.token()}`));
+    // effect(() => console.log(`this is token in campuses: ${this.token()}`));
   }
 
   goToCampus(id: number) {

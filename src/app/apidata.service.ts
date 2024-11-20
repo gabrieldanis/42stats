@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { Tokendata } from './tokendata';
 import { User } from './user';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -17,9 +17,12 @@ export class ApidataService {
     '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';
   private apiUrl = 'https://api.intra.42.fr';
 
-  // token = toSignal(this.fetchToken());
-
+  // tokenObservable = this.fetchToken();
+  storedToken: Tokendata | undefined = undefined;
   fetchToken(): Observable<Tokendata> {
+    if (this.storedToken) {
+      return of(this.storedToken);
+    }
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
       Anonymous: '',
@@ -29,13 +32,16 @@ export class ApidataService {
       .set('grant_type', 'client_credentials')
       .set('client_id', this.uid)
       .set('client_secret', this.secret);
-    return this.http.post<Tokendata>(
-      this.apiUrl + '/oauth/token',
-      body.toString(),
-      {
+    return this.http
+      .post<Tokendata>(this.apiUrl + '/oauth/token', body.toString(), {
         headers,
-      },
-    );
+      })
+      .pipe(
+        tap((x) => {
+          this.storedToken = x;
+          // console.log(x);
+        }),
+      );
   }
 
   fetchUsers(token: string, id: number): Observable<User[]> {

@@ -18,7 +18,6 @@ export class HomeComponent implements OnInit {
   private router = inject(Router);
 
   ngOnInit() {
-    console.log(this.token());
     const token = this.token();
     this.router.navigate(['campuses'], { queryParams: { token } });
   }
