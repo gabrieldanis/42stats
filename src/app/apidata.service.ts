@@ -18,31 +18,31 @@ export class ApidataService {
   private apiUrl = 'https://api.intra.42.fr';
 
   // tokenObservable = this.fetchToken();
-  storedToken: Tokendata | undefined = undefined;
-  fetchToken(): Observable<Tokendata> {
-    if (this.storedToken) {
-      return of(this.storedToken);
-    }
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/x-www-form-urlencoded',
-      Anonymous: '',
-    });
+  // storedToken: Tokendata | undefined = undefined;
+  // fetchToken(): Observable<Tokendata> {
+  //   if (this.storedToken) {
+  //     return of(this.storedToken);
+  //   }
+  //   const headers = new HttpHeaders({
+  //     'Content-Type': 'application/x-www-form-urlencoded',
+  //     Anonymous: '',
+  //   });
 
-    const body = new HttpParams()
-      .set('grant_type', 'client_credentials')
-      .set('client_id', this.uid)
-      .set('client_secret', this.secret);
-    return this.http
-      .post<Tokendata>(this.apiUrl + '/oauth/token', body.toString(), {
-        headers,
-      })
-      .pipe(
-        tap((x) => {
-          this.storedToken = x;
-          // console.log(x);
-        }),
-      );
-  }
+  //   const body = new HttpParams()
+  //     .set('grant_type', 'client_credentials')
+  //     .set('client_id', this.uid)
+  //     .set('client_secret', this.secret);
+  //   return this.http
+  //     .post<Tokendata>(this.apiUrl + '/oauth/token', body.toString(), {
+  //       headers,
+  //     })
+  //     .pipe(
+  //       tap((x) => {
+  //         this.storedToken = x;
+  //         // console.log(x);
+  //       }),
+  //     );
+  // }
 
   fetchUsers(token: string, id: number): Observable<User[]> {
     const headers = new HttpHeaders({

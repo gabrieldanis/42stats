@@ -6,6 +6,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { CampusesComponent } from './campuses/campuses.component';
 import { HomeComponent } from './home/home.component';
 import { ActivatedRoute } from '@angular/router';
+import { AuthTokenService } from './auth-token.service';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -16,11 +18,17 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class AppComponent {
   title = 'card';
-  private apiDataService = inject(ApidataService);
+  private authToken = inject(AuthTokenService);
   tokenSignal: Signal<Tokendata | undefined>;
 
   constructor() {
-    this.tokenSignal = toSignal(this.apiDataService.fetchToken());
+    this.tokenSignal = toSignal(
+      this.authToken.fetchToken().pipe(
+        tap((tokendata) => {
+          this.authToken.setAccessToken(tokendata.access_token);
+        }),
+      ),
+    );
   }
   // users = computed(() => {
   //   const token = this.tokenSignal();

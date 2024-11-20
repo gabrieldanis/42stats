@@ -23,10 +23,12 @@ export class AuthTokenService {
   }
 
   setAccessToken(token: string): void {
+    console.log('access token is set');
     this.accessToken = token;
   }
 
   fetchToken(): Observable<Tokendata> {
+    console.log('fetching token');
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
     });
