@@ -28,22 +28,25 @@ export class FetchCampusesService {
   //   return this.http.get<Campus[]>(url, { headers });
   // }
 
-  fetchCampusPage(page: number, token: string): Observable<Campus[]> {
+  // fetchCampusPage(page: number, token: string): Observable<Campus[]> {
+  fetchCampusPage(page: number): Observable<Campus[]> {
     const url = `${this.apiUrl}${page}`;
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-    return this.http.get<Campus[]>(url, { headers });
+    // const headers = new HttpHeaders({
+    //   Authorization: `Bearer ${token}`,
+    // });
+    // return this.http.get<Campus[]>(url, { headers });
+    return this.http.get<Campus[]>(url);
   }
 
   fetchAllCampuses(token: string): Observable<Campus[]> {
-    return this.fetchCampusPage(this.campusPage, token).pipe(
+    // return this.fetchCampusPage(this.campusPage, token).pipe(
+    return this.fetchCampusPage(this.campusPage).pipe(
       expand((data: Campus[]) => {
         if (data.length > 0) {
           this.campusPage++;
           return of(null).pipe(
             delay(150), // Add a delay of 1 second before making the next request
-            mergeMap(() => this.fetchCampusPage(this.campusPage, token)),
+            mergeMap(() => this.fetchCampusPage(this.campusPage)),
           );
         } else {
           return of([]);

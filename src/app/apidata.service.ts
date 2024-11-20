@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Tokendata } from './tokendata';
 import { User } from './user';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',
@@ -16,9 +17,12 @@ export class ApidataService {
     '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';
   private apiUrl = 'https://api.intra.42.fr';
 
+  // token = toSignal(this.fetchToken());
+
   fetchToken(): Observable<Tokendata> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
+      Anonymous: '',
     });
 
     const body = new HttpParams()
