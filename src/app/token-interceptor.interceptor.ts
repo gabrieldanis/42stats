@@ -33,31 +33,25 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
     req = addAuthorizationHeader(req, accessToken);
   }
 
-  return timer(delay).pipe(
-    switchMap(() => {
-      return next(req).pipe(
-        catchError((error) => {
-          if (error.status === 401) {
-            return authToken.fetchToken().pipe(
-              switchMap((resp) => {
-                if (resp && resp.access_token) {
-                  authToken.setAccessToken(resp.access_token);
-                  req = addAuthorizationHeader(req, resp.access_token);
-                  return next(req);
-                } else {
-                  return throwError(
-                    () => new Error('invalid token, trying to get new one'),
-                  );
-                }
-              }),
-            );
-          } else {
-            return throwError(
-              () => new Error('http request from 42 API failed'),
-            );
-          }
-        }),
-      );
+  return next(req).pipe(
+    catchError((error) => {
+      if (error.status === 401) {
+        return authToken.fetchToken().pipe(
+          switchMap((resp) => {
+            if (resp && resp.access_token) {
+              authToken.setAccessToken(resp.access_token);
+              req = addAuthorizationHeader(req, resp.access_token);
+              return next(req);
+            } else {
+              return throwError(
+                () => new Error('invalid token, trying to get new one'),
+              );
+            }
+          }),
+        );
+      } else {
+        return throwError(() => new Error('http request from 42 API failed'));
+      }
     }),
   );
 };
