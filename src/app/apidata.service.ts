@@ -17,11 +17,8 @@ export class ApidataService {
     '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';
   private apiUrl = 'https://api.intra.42.fr';
 
-  fetchUsers(token: string, id: number): Observable<User[]> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
+  fetchUsers(id: number): Observable<User[]> {
     const url = `${this.apiUrl}/v2/cursus_users/?filter[campus_id]=${id}&page[number]=1`;
-    return this.http.get<User[]>(url, { headers });
+    return this.http.get<User[]>(url);
   }
 }

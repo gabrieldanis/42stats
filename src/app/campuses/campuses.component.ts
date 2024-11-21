@@ -2,74 +2,64 @@ import {
   Component,
   computed,
   effect,
+  ElementRef,
   inject,
-  input,
-  OnInit,
   Signal,
   signal,
+  viewChild,
 } from '@angular/core';
 import { FetchCampusesService } from '../fetch-campuses.service';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { switchMap } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
 import { ApidataService } from '../apidata.service';
 import { FormsModule } from '@angular/forms';
 import { Campus } from '../campus';
+import { AuthTokenService } from '../auth-token.service';
 
 @Component({
   selector: 'app-campuses',
   standalone: true,
   imports: [RouterModule, FormsModule],
-  template: ` <form>
-      <label>Search</label
+  template: `
+    <form class="search-container">
+      <label class="search-label">Search</label
       ><input
+        #inputElement
+        class="search-input"
         [ngModel]="query()"
         (ngModelChange)="query.set($event)"
         [ngModelOptions]="{ standalone: true }"
         placeholder="start typing"
       />
     </form>
-    <p>{{ query() }}</p>
-    @if (foundCampuses(); as campus) {
-      <section class="campus-content">
-        <a (click)="goToCampus(campus.id)" class="campus-field">{{
-          campus.name
-        }}</a>
-      </section>
-    }
-    ,
-    @if (campuses(); as campuses) {
+    @if (foundCampuses(); as campuses) {
       <section class="campus-content">
         @for (campus of campuses; track campus.id) {
-          <a (click)="goToCampus(campus.id)" class="campus-field">{{
+          <a [routerLink]="['campus', campus.id]" class="campus-field">{{
             campus.name
           }}</a>
         }
       </section>
-    }`,
+    }
+  `,
   styleUrl: './campuses.component.css',
 })
 export class CampusesComponent {
   apiCampusData = inject(FetchCampusesService);
   apiDataService = inject(ApidataService);
+  authTokenService = inject(AuthTokenService);
   router = inject(Router);
-  readonly token = input.required<string>();
   query = signal('');
-  campuses = toSignal(
-    toObservable(this.token).pipe(
-      switchMap((token) => {
-        return this.apiCampusData.fetchAllCampuses(token);
-      }),
-    ),
-    { initialValue: [] },
-  );
+  searchInput: Signal<ElementRef> = viewChild.required('inputElement');
+  campuses: Signal<Campus[] | undefined> = this.apiCampusData.getCampuses();
 
-  foundCampuses: Signal<Campus | undefined> = computed(() =>
-    this.campuses().find((campus) => campus.name.startsWith(this.query())),
-  );
-
-  goToCampus(id: number) {
-    const token = this.token();
-    this.router.navigate(['campus/', id], { queryParams: { token } });
+  constructor() {
+    effect(() => {
+      this.searchInput().nativeElement.focus();
+    });
   }
+
+  foundCampuses: Signal<Campus[] | undefined> = computed(() => {
+    const campuses = this.campuses();
+    return campuses?.filter((campus) => campus.name.startsWith(this.query()));
+  });
 }

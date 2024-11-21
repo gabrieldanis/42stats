@@ -1,9 +1,10 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, Signal } from '@angular/core';
 import { ApidataService } from '../apidata.service';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { switchMap } from 'rxjs';
 import { CardComponent } from '../card/card.component';
 import { CardBodyComponent } from '../card-body/card-body.component';
+import { ActivatedRoute } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { User } from '../user';
 
 @Component({
   selector: 'app-details',
@@ -35,15 +36,13 @@ import { CardBodyComponent } from '../card-body/card-body.component';
   styleUrl: './details.component.css',
 })
 export class DetailsComponent {
-  id = input.required<number>();
-  readonly token = input.required<string>();
-
   apiDataService = inject(ApidataService);
-  users = toSignal(
-    toObservable(this.token).pipe(
-      switchMap((token) => {
-        return this.apiDataService.fetchUsers(token, this.id());
-      }),
-    ),
-  );
+  route: ActivatedRoute = inject(ActivatedRoute);
+  campusId = 0;
+  users: Signal<User[] | undefined>;
+
+  constructor() {
+    this.campusId = Number(this.route.snapshot.params['id']);
+    this.users = toSignal(this.apiDataService.fetchUsers(this.campusId));
+  }
 }

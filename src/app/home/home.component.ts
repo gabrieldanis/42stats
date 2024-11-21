@@ -7,18 +7,19 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
-    <!-- <a [routerLink]="['campuses', token()]">link to campus </a> -->
+    <header class="fira-font">
+      <!-- <a href="#" (click)="navigateHome()"> -->
+      <a routerLink="">
+        <img class="logo" src="/assets/42_Logo.svg" width="150px" />
+      </a>
+      <ul>
+        <li>// browse through all of the school 42 campuses</li>
+        <li>// search for login names</li>
+        <li>// do something else, I don't know</li>
+      </ul>
+    </header>
     <router-outlet></router-outlet>
   `,
   styleUrl: './home.component.css',
 })
-// export class HomeComponent implements OnInit {
-export class HomeComponent implements OnInit {
-  token = input.required<string>();
-  private router = inject(Router);
-
-  ngOnInit() {
-    const token = this.token();
-    this.router.navigate(['campuses'], { queryParams: { token } });
-  }
-}
+export class HomeComponent {}

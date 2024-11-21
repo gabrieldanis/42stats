@@ -1,9 +1,15 @@
 @if (tokenSignal(); as token) {
-  <app-home [token]="token.access_token"></app-home>
-  <!-- <app-home [users]="users"></app-home> -->
+  <header class="fira-font">
+    <a routerLink="">
+      <img class="logo" src="/assets/42_Logo.svg" width="150px" />
+    </a>
+    <ul>
+      <li>// browse through all of the school 42 campuses</li>
+      <li>// search for login names</li>
+      <li>// do something else, I don't know</li>
+    </ul>
+  </header>
+  <router-outlet></router-outlet>
 } @else {
   Loading Token....
 }
-
-<!-- <button (click)="logToken()">token</button>
-<button (click)="logData()">data</button> -->
