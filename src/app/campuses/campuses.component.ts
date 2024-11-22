@@ -23,6 +23,7 @@ import { AuthTokenService } from '../auth-token.service';
     <form class="search-container">
       <label class="search-label">Search</label
       ><input
+        (keydown.enter)="goToCampus()"
         #inputElement
         class="search-input"
         [ngModel]="query()"
@@ -62,4 +63,11 @@ export class CampusesComponent {
     const campuses = this.campuses();
     return campuses?.filter((campus) => campus.name.startsWith(this.query()));
   });
+
+  goToCampus() {
+    const campuses = this.foundCampuses();
+    if (campuses) {
+      this.router.navigate(['campus/', campuses[0].id]);
+    }
+  }
 }
