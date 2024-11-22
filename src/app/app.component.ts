@@ -17,7 +17,7 @@ export class AppComponent {
   title = 'app';
   private authToken = inject(AuthTokenService);
   tokenSignal: Signal<Tokendata | undefined>;
-
+  router = inject(Router);
   constructor() {
     this.tokenSignal = toSignal(
       this.authToken.fetchToken().pipe(
@@ -26,5 +26,8 @@ export class AppComponent {
         }),
       ),
     );
+    if (window.location.pathname !== '/') {
+      this.router.navigateByUrl('/');
+    }
   }
 }

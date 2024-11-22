@@ -5,13 +5,14 @@ import { CampusesComponent } from './campuses/campuses.component';
 
 export const routes: Routes = [
   {
-    path: '',
-    component: CampusesComponent,
-    title: 'Choose Campus',
-  },
-  {
     path: 'campus/:id',
     component: DetailsComponent,
     title: 'Your Campus',
   },
+  {
+    path: '',
+    component: CampusesComponent,
+    title: 'Choose Campus',
+  },
+  { path: '**', redirectTo: '' },
 ];

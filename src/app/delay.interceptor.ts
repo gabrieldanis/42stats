@@ -1,5 +1,5 @@
 import { HttpInterceptorFn } from '@angular/common/http';
-import { switchMap, timer } from 'rxjs';
+import { switchMap, tap, timer } from 'rxjs';
 
 export const delayInterceptor: HttpInterceptorFn = (req, next) => {
   const delay = 400;
@@ -8,6 +8,7 @@ export const delayInterceptor: HttpInterceptorFn = (req, next) => {
   }
 
   return timer(delay).pipe(
+    tap(() => console.log('delay active')),
     switchMap(() => {
       return next(req);
     }),
